@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Coordinates Tool</title>
+  <link rel='stylesheet' href='https://unpkg.com/leaflet@1.2.0/dist/leaflet.css'>
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div class="map_container">
+ <div id="map"></div>
+</div>
+ <div id="app1">
+     <p><span v-if="(latitude !== null) && (longitude !== null)">Lat: {{latitude}}; Lon: {{longitude}}; </span><br/>
+     Mode: {{modeDesc}}<br/>
+     <span v-if="mode==3">Circle radius: <input  type="text" :value="radius" @change="recalcGeoData($event)" @keyup="recalcGeoData($event)"/>m  </span></p>
+     <textarea v-model="reactiveContent" style="width: calc(100% - 100px); height: 100px;"></textarea>
+     <p class="dummy">{{pointStr}} {{lineStr}} {{circleStr}} {{polygonStr}}</p>
+ </div>
+ <div id="icons" style="position:absolute; top: 10px; right: 10px; width: 50px">
+ 	<input type="button" class="icon" style="background-position-y: 0%;" @click="setMode(0)" :class="{highlightOn:mode==0}"/>
+ 	<input type="button" class="icon" style="background-position-y: 25%;" @click="setMode(1)" :class="{highlightOn:mode==1}"/>
+ 	<input type="button" class="icon" style="background-position-y: 50%;" @click="setMode(2)" :class="{highlightOn:mode==2}"/>
+ 	<input type="button" class="icon" style="background-position-y: 75%;" @click="setMode(3)" :class="{highlightOn:mode==3}"/>
+ 	<input type="button" class="icon" style="background-position-y: 100%;" @click="setMode(4)" :class="{highlightOn:mode==4}"/>
+ 	<p class="dummy">{{dummy}}</p>
+ 	<input type="text" value="Demo 1" @click="doDemo(1)"/><br/>
+ 	<input type="text" value="Demo 2" @click="doDemo(2)"/><br/>
+ 	<input type="text" value="Demo 3" @click="doDemo(3)"/><br/>
+ 	<input type="text" value="Demo 4" @click="doDemo(4)"/><br/>
+ </div>
+ 
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/leaflet.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/Turf.js/5.0.4/turf.min.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+
+
+<script  src="./script.js"></script>
+
+</body>
+</html>
