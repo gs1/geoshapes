@@ -20,7 +20,6 @@ let app1=Vue.createApp({
 		},
 		recalcGeoData : function(evt) {
 		    this.radius=evt.target.value;
-		    console.log("recalculating geoData for new radius "+evt.target.value);
 		    let t = JSON.parse(this.reactiveContent);
 		    if (t.hasOwnProperty("circle")) {
 		        let c=t.circle;
@@ -153,7 +152,6 @@ let app1=Vue.createApp({
 	              this.mode=2;
 	              recentreMap3(this.geodataList);
 	              drawLineFromString(d.line);
-	              console.log("Line 146 d.line="+d.line);
 	          }
 	      }
 	      return rv;
@@ -169,7 +167,6 @@ let app1=Vue.createApp({
 	              recentreMap4(el[0]+" "+el[1],el[2]);
 	              this.radius=el[2];
 	              drawCircleFromString(d.circle);
-	              console.log("Line 146 d.circle="+d.circle);
 	          }
 	      }
 	      return rv;
@@ -180,7 +177,6 @@ let app1=Vue.createApp({
 	          let d=JSON.parse(this.reactiveContent);
 	          if (d.hasOwnProperty("polygon")) {
 	              rv=d.polygon;
-	              console.log("Line 146 d.polygon="+d.polygon);
 	              let arr = d.polygon.split(/[ ]+/);
 	              let gdl=[];
 	              for (let i=0; i<arr.length-1; i+=2) {
@@ -277,15 +273,12 @@ function recentreMap3(arr) {
     let centrePoint = new L.LatLng(parseFloat(sumLat/count), parseFloat(sumLon/count));
     let deltaLat=(maxLat-minLat)/2;
     let deltaLon=(maxLon-minLon)/2;
-    console.log("deltaLat = "+deltaLat);
-    console.log("deltaLon = "+deltaLon);
     
     let zoom1=(18-2.7*Math.log(deltaLat / 0.0001430057703)/Math.log(10));
     let zoom2=(18-2.7*Math.log(deltaLon / 0.000227988)/Math.log(10));
     let zoom=Math.floor(Math.max(zoom1,zoom2));
         if (zoom > 18) { zoom = 18 };
         if (zoom < 0) { zoom = 0 };
-    console.log("zoom = "+zoom);
     map.setView (centrePoint,zoom = zoom);
 }
 
@@ -293,7 +286,6 @@ function recentreMap4(pointString, radius) {
         let el=pointString.split(/[ ]+/);  
         let centrePoint = new L.LatLng(parseFloat(el[0]),parseFloat(el[1]));
         let zoom = Math.floor(21 - 2.7*Math.log(radius)/Math.log(10)) ;
-        console.log("recentreMap4 for radius "+radius+"; zoom = "+zoom);
         if (zoom > 18) { zoom = 18 };
         if (zoom < 0) { zoom = 0 };
         map.setView (centrePoint,zoom = zoom);
