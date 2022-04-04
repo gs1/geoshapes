@@ -14,7 +14,7 @@ let app1=Vue.createApp({
 		},
 	methods : {
 		copydata : function() {
-			var promise = navigator.clipboard.writeText("Hello");
+			var promise = navigator.clipboard.writeText(""+this.reactiveContent+"");
 		},
 	
 		setMode : function(mode) {
