@@ -31,14 +31,14 @@ let app1=Vue.createApp({
 		},
 		doDemo : function(demo) {
 		    if (demo==1) {
-		        this.geodataList = ["52.2021997955309 0.1281976257450879"];
+		        this.geodataList = ["52.2021998 0.1281976"];
 		        this.mode=1; // draw a point
 		        this.reactiveContent = this.geoData();
 		        icons.switchMode(1);
 		        
 		    }
 		    if (demo==2) {
-		        this.geodataList=["52.20588949935074 0.12507519917562607","52.205613352362626 0.1234336872585118"];
+		        this.geodataList=["52.2058894 0.1250752","52.2056134 0.1234337"];
 		        this.mode=2; // draw a line
 		        this.reactiveContent = this.geoData();
 		        icons.switchMode(2);
@@ -46,13 +46,13 @@ let app1=Vue.createApp({
 		    }
 		    if (demo==3) {
 		        this.radius=15;
-		        this.geodataList=["52.2054158464 0.12226108"];
+		        this.geodataList=["52.2054158 0.1222611"];
 		        this.mode=3; // draw a circle
 		        this.reactiveContent = this.geoData();
 		        icons.switchMode(3);
 		    }
 		    if (demo==4) {
-		        this.geodataList=["52.19996179888606 0.12795151211321357","52.20113227319388 0.12962521053850654","52.202526281024674 0.1309770438820124","52.20407804962999 0.1273292396217585","52.20299970769923 0.12629927136003974","52.202526281024674 0.12629927136003974","52.201881886613144 0.1253336761146784","52.201263785234616 0.1259559486061335","52.19996179888606 0.12795151211321357"];
+		        this.geodataList=["52.1999618 0.1279515","52.2011323 0.1296252","52.2025263 0.1309770","52.2040780 0.1273292","52.2029997 0.1262993","52.2025263 0.1262993","52.2018819 0.1253337","52.2012638 0.1259559","52.1999618 0.1279515"];
 		        this.mode=4;
 		        this.reactiveContent = this.geoData();
 		        icons.switchMode(4);
@@ -236,7 +236,13 @@ var xlng = 0.0000064;
 var xlat = 0.0000050;
 let mapMarkers=[];
 
-
+function to7decimalplaces(val) {
+	if (val > 0) {
+		return Math.floor(1e7*val+0.4999999999)/1e7
+	} else {
+		return Math.ceil(1e7*val-0.4999999999)/1e7
+	}
+}
 
 function clearMapMarkers() {
     for(let i = 0; i < mapMarkers.length; i++){
@@ -385,7 +391,7 @@ map.on('click', function(e) {
   var c;
   
   if ((app1.mode >= 1) && (app1.mode <=4)) {
-		        app1.geodataList.push(e.latlng.lat+" "+e.latlng.lng);
+		        app1.geodataList.push(to7decimalplaces(e.latlng.lat)+" "+to7decimalplaces(e.latlng.lng));
 		        app1.reactiveContent = app1.geoData();
   }
 
