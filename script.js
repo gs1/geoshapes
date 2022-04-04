@@ -8,11 +8,15 @@ let app1=Vue.createApp({
 			geodataList: [],
 			radius: 0,
 			modes: ["Move","Point","Line","Circle","Polygon"],
-			adviceMessages: ["Move the map without drawing anything","Click on the map to mark a point","Draw a line between the last two clicked points; click the icon again to restart","Click on the map to set the centre, then choose the radius; click the icon again to restart","Click the map at each vertex of the polygon for 3 or more points; click the icon again to restart"],
+			adviceMessages: ["Move the map without drawing anything","Click on the map to mark a point","Draw a line between the last two clicked points; click the icon again to restart","Click on the map to set the centre; choose the radius; click on the map again to change the centre; click the icon again to restart","Click the map at each vertex of the polygon for 3 or more points; click the icon again to restart"],
 			reactiveContent: ""
           }
 		},
 	methods : {
+		copydata : function() {
+			navigator.clipboard.writeText(this.reactiveContent);
+		},
+	
 		setMode : function(mode) {
 			this.mode=mode;
 			this.geodataList=[];
