@@ -27,9 +27,7 @@ let app1=Vue.createApp({
 		},
 
 		copylink : function() {
-			var directLink = "https://gs1.github.io/geoshapes/?d="+compress(""+this.reactiveContent+"");
-			console.log("directLink = "+directLink);
-			var promise = navigator.clipboard.writeText(directLink);		
+			var promise = navigator.clipboard.writeText(""+this.directLink+"");
 		},
 	
 		setMode : function(mode) {
@@ -127,6 +125,15 @@ let app1=Vue.createApp({
 		}
 	},
 	computed : {
+		directLink : function() {
+			let rv="";
+			if (this.reactiveContent !== "" ) {
+				rv=compress(""+this.reactiveContent+"");
+			}
+			return rv;
+		},
+	
+	
 	    latitude : function() {
 	        let rv="";
 	        if (this.geodataList.length > 0) {
@@ -451,10 +458,12 @@ function leftpad(value, length, c) {
 
 function compress(jsonString) {
 	let json=JSON.parse(jsonString);
-	if (json.hasOwnProperty("polygon")) { return "p"+comp(json.polygon); }
-	if (json.hasOwnProperty("line")) { return "l"+comp(json.line); }
-	if (json.hasOwnProperty("circle")) { return "c"+comp(json.circle); }
-	if (json.hasOwnProperty("point")) { return "x"+comp(json.point); }	
+	let rv="";
+	if (json.hasOwnProperty("polygon")) { rv= "p"+comp(json.polygon); }
+	if (json.hasOwnProperty("line")) { rv= "l"+comp(json.line); }
+	if (json.hasOwnProperty("circle")) { rv= "c"+comp(json.circle); }
+	if (json.hasOwnProperty("point")) { rv= "x"+comp(json.point); }	
+	return rv;
 }
 
 function decompress(base64) {

@@ -15,6 +15,7 @@
  <div id="app1">
      <p style="margin-right:100px;"><span style="text-align:left; left:0px;">Mode: {{modeDesc}}  <span v-if="mode==3">with radius: <input  type="text" :value="radius" @change="recalcGeoData($event)" @keyup="recalcGeoData($event)"/>m  </span></span><span style="float: right;" v-if="(latitude !== null) && (longitude !== null)">Lat: {{latitude}}; Lon: {{longitude}}; </span><br/><span style="float:left; left:0px;">{{advice}}</span><span style="float: right;"><input type="button" value="Copy data to Clipboard" @click="copydata()"></span><span style="float: right;"><input type="button" value="Copy link" @click="copylink()"></span></p>
      <textarea v-model="reactiveContent" style="width: calc(100% - 100px); height: 200px;"></textarea>
+     <p>{{directLink}}</p>
      <p class="dummy">{{pointStr}} {{lineStr}} {{circleStr}} {{polygonStr}}</p>
  </div>
  <div id="icons" style="position:absolute; top: 10px; right: 10px; width: 50px">
