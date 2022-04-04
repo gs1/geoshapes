@@ -1,6 +1,15 @@
 let latitude = 52.2021950;
 let longitude = 0.1282028;
 
+const params = new Proxy(new URLSearchParams(window.location.search), {
+  get: (searchParams, prop) => searchParams.get(prop),
+});
+
+let reactiveContent="";
+if (params.d !== null) {
+	reactiveContent=decompress(params.d);
+}
+
 let app1=Vue.createApp({
 		data() {
           return {
@@ -9,12 +18,16 @@ let app1=Vue.createApp({
 			radius: 0,
 			modes: ["Move","Point","Line","Circle","Polygon"],
 			adviceMessages: ["Move the map without drawing anything","Click on the map to mark a point","Draw a line between the last two clicked points; click the icon again to restart","Click on the map to set the centre; choose the radius; click on the map again to change the centre; click the icon again to restart","Click the map at each vertex of the polygon for 3 or more points; click the icon again to restart"],
-			reactiveContent: ""
+			reactiveContent: reactiveContent
           }
 		},
 	methods : {
 		copydata : function() {
 			var promise = navigator.clipboard.writeText(""+this.reactiveContent+"");
+		},
+
+		copylink : function() {
+			var promise = navigator.clipboard.writeText("https://gs1.github.io/geoshapes/?d="+compress(""+this.reactiveContent+""));		
 		},
 	
 		setMode : function(mode) {
@@ -392,6 +405,67 @@ function drawPolygon(polygonstring) {
       });
       polygon.addTo(map);
       mapMarkers.push(polygon);
+}
+
+
+
+function comp(u){
+	let alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+	let v=u.replace(/\s+/g,"f").replace(/[+]/g,"a").replace(/[-]/g,"b").replace(/[,]/g,"c").replace(/\./g,"d");	
+	if (((v.length)%3) > 0) {
+		v+="e".repeat(3-((v.length)%3));
+	}
+	let l=v.length;
+	let o="";
+	for (let i=0; i<l/3; i++) {
+		let w=v.substr(3*i,3);
+		let b=parseInt(w,16).toString(2);
+		b="0".repeat(12-b.length)+b;
+		o+=alphabet.charAt(parseInt(b.substr(0,6),2))+alphabet.charAt(parseInt(b.substr(6,6),2));
+	}
+	return o;
+}
+
+function decomp(c) {
+	let alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+	let o="";
+	for (let i=0; i<c.length; i+=2) {
+		let r=leftpad(alphabet.indexOf(c.charAt(i)).toString(2),6,"0")+leftpad(alphabet.indexOf(c.charAt(1+i)).toString(2),6,"0");
+		o+=parseInt(r.substr(0,4),2).toString(16)+parseInt(r.substr(4,4),2).toString(16)+parseInt(r.substr(8,4),2).toString(16);	
+	}
+
+let w=o.replace(/f/g," ").replace(/a/g,"+").replace(/b/g,"-").replace(/c/g,",").replace(/d/g,".").replace(/e$/,"");
+return w;
+}
+
+
+function leftpad(value, length, c) {
+	if (value.length < length) {
+		return "0".repeat(6-((value.length)%6))+value;
+	} else {
+		return value;
+	}
+}
+
+function compress(jsonString) {
+	let json=JSON.parse(jsonString);
+	if (json.hasOwnProperty("polygon")) { return "p"+comp(json.polygon); }
+	if (json.hasOwnProperty("line")) { return "l"+comp(json.line); }
+	if (json.hasOwnProperty("circle")) { return "c"+comp(json.circle); }
+	if (json.hasOwnProperty("point")) { return "x"+comp(json.point); }
+	
+	
+}
+
+function decompress(base64) {
+	let i=base64.charAt(0);
+	let remainder=base64.substr(1);
+	let rv={"@type":"GeoShape"};
+	if (i=="p") {rv.polygon=decomp(remainder); } 
+	if (i=="l") {rv.line=decomp(remainder); }
+	if (i=="c") {rv.circle=decomp(remainder); }
+	if (i=="x") {rv['@type']="GeoCoordinates"; rv.point=decomp(remainder); }
+	return JSON.stringify(rv,null,2);
 }
 
 
