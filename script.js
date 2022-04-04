@@ -7,7 +7,13 @@ const params = new Proxy(new URLSearchParams(window.location.search), {
 
 let reactiveContent="";
 if (params.d !== null) {
-	reactiveContent=decompress(params.d);
+	let data=decompress(params.d);
+	setTimeout(setData(data),500);
+}
+
+function setData(val) {
+	let el=document.getElementById("data");
+	el.value=val;
 }
 
 let app1=Vue.createApp({
@@ -18,7 +24,7 @@ let app1=Vue.createApp({
 			radius: 0,
 			modes: ["Move","Point","Line","Circle","Polygon"],
 			adviceMessages: ["Move the map without drawing anything","Click on the map to mark a point","Draw a line between the last two clicked points; click the icon again to restart","Click on the map to set the centre; choose the radius; click on the map again to change the centre; click the icon again to restart","Click the map at each vertex of the polygon for 3 or more points; click the icon again to restart"],
-			reactiveContent: reactiveContent
+			reactiveContent: ""
           }
 		},
 	methods : {
