@@ -27,7 +27,9 @@ let app1=Vue.createApp({
 		},
 
 		copylink : function() {
-			var promise = navigator.clipboard.writeText("https://gs1.github.io/geoshapes/?d="+compress(""+this.reactiveContent+""));		
+			var directLink = "https://gs1.github.io/geoshapes/?d="+compress(""+this.reactiveContent+"");
+			console.log("directLink = "+directLink);
+			var promise = navigator.clipboard.writeText(directLink);		
 		},
 	
 		setMode : function(mode) {
@@ -452,9 +454,7 @@ function compress(jsonString) {
 	if (json.hasOwnProperty("polygon")) { return "p"+comp(json.polygon); }
 	if (json.hasOwnProperty("line")) { return "l"+comp(json.line); }
 	if (json.hasOwnProperty("circle")) { return "c"+comp(json.circle); }
-	if (json.hasOwnProperty("point")) { return "x"+comp(json.point); }
-	
-	
+	if (json.hasOwnProperty("point")) { return "x"+comp(json.point); }	
 }
 
 function decompress(base64) {
