@@ -5,10 +5,9 @@ const params = new Proxy(new URLSearchParams(window.location.search), {
   get: (searchParams, prop) => searchParams.get(prop),
 });
 
-let reactiveContent="";
+let fromQueryString="";
 if (params.d !== null) {
-	let data=decompress(params.d);
-	setTimeout(app1.setData(data),500);
+	fromQueryString=decompress(params.d);
 }
 
 
@@ -20,12 +19,13 @@ let app1=Vue.createApp({
 			radius: 0,
 			modes: ["Move","Point","Line","Circle","Polygon"],
 			adviceMessages: ["Move the map without drawing anything","Click on the map to mark a point","Draw a line between the last two clicked points; click the icon again to restart","Click on the map to set the centre; choose the radius; click on the map again to change the centre; click the icon again to restart","Click the map at each vertex of the polygon for 3 or more points; click the icon again to restart"],
-			reactiveContent: ""
+			reactiveContent: "",
+			fromQueryString: fromQueryString
           }
 		},
 	methods : {
 		setData : function(val) {
-			this.reactiveContent = val;
+			this.reactiveContent = this.fromQueryString;
 		},
 	
 		copydata : function() {
@@ -129,6 +129,9 @@ let app1=Vue.createApp({
 			
 			return rv;
 		}
+	},
+	mounted() {
+		if (this.fromQueryString !== "") { this.reactiveContent = this.fromQueryString }
 	},
 	computed : {
 		directLink : function() {
