@@ -130,6 +130,9 @@ let app1=Vue.createApp({
 			if (this.reactiveContent !== "" ) {
 				rv=compress(""+this.reactiveContent+"");
 			}
+			if (rv !== "" ) {
+				rv="https://gs1.github.io/geoshapes/?d="+rv;
+			}
 			return rv;
 		},
 	
