@@ -8,13 +8,9 @@ const params = new Proxy(new URLSearchParams(window.location.search), {
 let reactiveContent="";
 if (params.d !== null) {
 	let data=decompress(params.d);
-	setTimeout(setData(data),500);
+	setTimeout(app1.setData(data),500);
 }
 
-function setData(val) {
-	let el=document.getElementById("data");
-	el.value=val;
-}
 
 let app1=Vue.createApp({
 		data() {
@@ -28,6 +24,10 @@ let app1=Vue.createApp({
           }
 		},
 	methods : {
+		setData : function(val) {
+			this.reactiveContent = val;
+		},
+	
 		copydata : function() {
 			var promise = navigator.clipboard.writeText(""+this.reactiveContent+"");
 		},
